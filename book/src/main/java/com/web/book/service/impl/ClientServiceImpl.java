@@ -9,6 +9,7 @@ import com.web.book.repository.BorrowingRepository;
 import com.web.book.repository.ClientRepository;
 import com.web.book.service.ClientService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
@@ -39,6 +41,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientDto create(ClientDto dto) {
         Client saved = clientRepository.save(clientMapper.toEntity(dto));
+        log.info("Client created: id={}, name={}", saved.getId(), saved.getFullName());
         return clientMapper.toDto(saved);
     }
 
@@ -50,6 +53,7 @@ public class ClientServiceImpl implements ClientService {
         client.setFullName(dto.getFullName());
         client.setBirthDate(dto.getBirthDate());
         Client saved = clientRepository.save(client);
+        log.info("Client updated: id={}", id);
         return clientMapper.toDto(saved);
     }
 
@@ -63,5 +67,6 @@ public class ClientServiceImpl implements ClientService {
             throw new ClientHasActiveBorrowingsException();
         }
         clientRepository.deleteById(id);
+        log.info("Client deleted: id={}", id);
     }
 }

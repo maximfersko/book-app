@@ -1,6 +1,9 @@
 server:
   port: ${SERVER_PORT:8080}
 
+app:
+  page-size: ${PAGE_SIZE:20}
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:${DB_PORT:5432}/${DB_NAME:library_db}
@@ -18,3 +21,9 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   thymeleaf:
     cache: false
+
+logging:
+  level:
+    root: ${LOG_LEVEL:INFO}
+    com.web.book: ${LOG_LEVEL_APP:DEBUG}
+    org.hibernate.SQL: ${LOG_LEVEL_SQL:WARN}

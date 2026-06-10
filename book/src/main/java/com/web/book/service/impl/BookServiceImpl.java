@@ -9,6 +9,7 @@ import com.web.book.repository.BookRepository;
 import com.web.book.repository.BorrowingRepository;
 import com.web.book.service.BookService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
@@ -39,6 +41,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto create(BookDto dto) {
         Book saved = bookRepository.save(bookMapper.toEntity(dto));
+        log.info("Book created: id={}, isbn={}", saved.getId(), saved.getIsbn());
         return bookMapper.toDto(saved);
     }
 
@@ -51,6 +54,7 @@ public class BookServiceImpl implements BookService {
         book.setTitle(dto.getTitle());
         book.setIsbn(dto.getIsbn());
         Book saved = bookRepository.save(book);
+        log.info("Book updated: id={}", id);
         return bookMapper.toDto(saved);
     }
 
@@ -64,5 +68,6 @@ public class BookServiceImpl implements BookService {
             throw new BookHasActiveBorrowingsException();
         }
         bookRepository.deleteById(id);
+        log.info("Book deleted: id={}", id);
     }
 }

@@ -3,8 +3,8 @@ package com.web.book.controller;
 import com.web.book.dto.ClientDto;
 import com.web.book.service.ClientService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,9 +20,12 @@ public class ClientController {
 
     private final ClientService clientService;
 
+    @Value("${app.page-size:20}")
+    private int pageSize;
+
     @GetMapping
-    public String list(Model model, @PageableDefault(size = 20) Pageable pageable) {
-        model.addAttribute("page", clientService.findAll(pageable));
+    public String list(Model model, @RequestParam(defaultValue = "0") int page) {
+        model.addAttribute("page", clientService.findAll(PageRequest.of(page, pageSize)));
         return "clients/list";
     }
 

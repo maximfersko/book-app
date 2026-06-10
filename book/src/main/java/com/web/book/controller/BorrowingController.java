@@ -5,9 +5,10 @@ import com.web.book.service.BookService;
 import com.web.book.service.BorrowingService;
 import com.web.book.service.ClientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,9 +26,13 @@ public class BorrowingController {
     private final BookService bookService;
     private final ClientService clientService;
 
+    @Value("${app.page-size:20}")
+    private int pageSize;
+
     @GetMapping
-    public String list(Model model, @PageableDefault(size = 20, sort = "borrowDate", direction = Sort.Direction.DESC) Pageable pageable) {
-        model.addAttribute("page", borrowingService.findAllReport(pageable));
+    public String list(Model model, @RequestParam(defaultValue = "0") int page) {
+        model.addAttribute("page", borrowingService.findAllReport(
+                PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "borrowDate"))));
         return "borrowings/list";
     }
 
