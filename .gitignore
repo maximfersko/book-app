@@ -25,3 +25,9 @@ replay_pid*
 
 # Environment
 .env
+
+# Build output
+target/
+
+# Logs
+logs/
