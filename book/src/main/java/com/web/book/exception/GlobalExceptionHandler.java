@@ -26,6 +26,18 @@ public class GlobalExceptionHandler {
         return "error";
     }
 
+    @ExceptionHandler({
+            BookAlreadyBorrowedException.class,
+            ClientHasActiveBorrowingsException.class,
+            BookHasActiveBorrowingsException.class
+    })
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public String handleBusinessConflict(AppException ex, Model model) {
+        model.addAttribute("status", 409);
+        model.addAttribute("message", ex.getMessage());
+        return "error";
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleValidation(MethodArgumentNotValidException ex, Model model) {
