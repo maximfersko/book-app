@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-borrowings
+      author: maxim
+      changes:
+        - createTable:
+            tableName: borrowings
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: client_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_borrowings_client
+                    references: clients(id)
+              - column:
+                  name: book_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_borrowings_book
+                    references: books(id)
+              - column:
+                  name: borrow_date
+                  type: date
+                  constraints:
+                    nullable: false
+        - createIndex:
+            tableName: borrowings
+            indexName: idx_borrowings_client_id
+            columns:
+              - column:
+                  name: client_id
+        - createIndex:
+            tableName: borrowings
+            indexName: idx_borrowings_book_id
+            columns:
+              - column:
+                  name: book_id

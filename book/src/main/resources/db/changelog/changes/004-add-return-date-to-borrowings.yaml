@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-add-return-date-to-borrowings
+      author: maxim
+      changes:
+        - addColumn:
+            tableName: borrowings
+            columns:
+              - column:
+                  name: return_date
+                  type: date

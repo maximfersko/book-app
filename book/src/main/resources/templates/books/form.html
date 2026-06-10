@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <h5 class="mb-3" th:text="${book.id} ? 'Edit Book' : 'Add Book'"></h5>
+    <div class="card p-4" style="max-width: 440px">
+        <form th:action="${book.id} ? @{/books/{id}(id=${book.id})} : @{/books}"
+              th:object="${book}" method="post">
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input type="text" class="form-control" th:field="*{title}" placeholder="Book title"/>
+                <div class="text-danger small" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Author</label>
+                <input type="text" class="form-control" th:field="*{author}" placeholder="Author name"/>
+                <div class="text-danger small" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">ISBN</label>
+                <input type="text" class="form-control" th:field="*{isbn}" placeholder="978-0-000-00000-0"/>
+                <div class="text-danger small" th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}"></div>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-dark btn-sm">Save</button>
+                <a th:href="@{/books}" class="btn btn-outline-secondary btn-sm">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

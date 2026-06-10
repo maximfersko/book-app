@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Borrowings</h5>
+        <a th:href="@{/borrowings/new}" class="btn btn-dark btn-sm">+ Borrow a Book</a>
+    </div>
+    <div class="card">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Client</th>
+                    <th>Book</th>
+                    <th>Author</th>
+                    <th>ISBN</th>
+                    <th>Borrow Date</th>
+                    <th>Return Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="b : ${page.content}">
+                    <td th:text="${b.fullName}"></td>
+                    <td th:text="${b.bookTitle}"></td>
+                    <td th:text="${b.author}"></td>
+                    <td th:text="${b.isbn}"></td>
+                    <td th:text="${b.borrowDate}"></td>
+                    <td th:text="${b.returnDate} ?: '—'"></td>
+                    <td class="text-end">
+                        <form th:if="${b.returnDate == null}"
+                              th:action="@{/borrowings/{id}/return(id=${b.id})}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Return</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${page.totalPages > 1}" class="d-flex justify-content-center mt-3">
+        <nav>
+            <ul class="pagination pagination-sm">
+                <li class="page-item" th:classappend="${page.first} ? 'disabled'">
+                    <a class="page-link" th:href="@{/borrowings(page=${page.number - 1})}">‹</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                    th:classappend="${i == page.number} ? 'active'">
+                    <a class="page-link" th:href="@{/borrowings(page=${i})}" th:text="${i + 1}"></a>
+                </li>
+                <li class="page-item" th:classappend="${page.last} ? 'disabled'">
+                    <a class="page-link" th:href="@{/borrowings(page=${page.number + 1})}">›</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</body>
+</html>
